@@ -96,17 +96,20 @@ function playMusic(track, pause = false) {
 
     if (!track) return;
 
-    currentsong.src =
-        `${currFolder}/${encodeURIComponent(track)}`;
+    currentsong.src = `${currFolder}/${encodeURIComponent(track)}`;
 
     console.log("Playing:", currentsong.src);
 
-    if (!pause) {
-        currentsong.play().catch(error => {
-            console.error("Song play error:", error);
-        });
+    currentsong.load();
 
-        document.querySelector("#play").src = "pause.svg";
+    if (!pause) {
+        currentsong.play()
+            .then(() => {
+                document.querySelector("#play").src = "pause.svg";
+            })
+            .catch(error => {
+                console.error("Song play error:", error);
+            });
     }
 
     document.querySelector(".songinfo").innerHTML = track;
