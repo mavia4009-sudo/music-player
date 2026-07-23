@@ -94,32 +94,23 @@ async function getsongs(folder) {
 
 function playMusic(track, pause = false) {
 
-    if (!track) {
-        return;
-    }
+    if (!track) return;
 
     currentsong.src =
         `${currFolder}/${encodeURIComponent(track)}`;
 
+    console.log("Playing:", currentsong.src);
 
     if (!pause) {
+        currentsong.play().catch(error => {
+            console.error("Song play error:", error);
+        });
 
-        currentsong.play();
-
-        document
-            .querySelector("#play")
-            .src = "pause.svg";
-
+        document.querySelector("#play").src = "pause.svg";
     }
 
-
-    document
-        .querySelector(".songinfo")
-        .innerHTML = track;
-
-    document
-        .querySelector(".songtime")
-        .innerHTML = "00:00/00:00";
+    document.querySelector(".songinfo").innerHTML = track;
+    document.querySelector(".songtime").innerHTML = "00:00/00:00";
 }
 
 
