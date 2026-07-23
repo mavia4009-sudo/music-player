@@ -1,4 +1,12 @@
 {
-    "tittle": "No copy right songs",
-    "description": "songs foryou"
+    "title": "Music Collection",
+    "description": "Best Music Collection",
+    "songs": [
+        "Monument Music - Chapter Two - Copy - Copy.mp3",
+        "messwave - lost in the right direction - Copy.mp3",
+        "idokay - What Youve Been Looking For - Copy.mp3",
+        "dannyminus - Dubai Rizz - Copy.mp3",
+        "Captain Joz - Cut to the Chase - Copy.mp3",
+        "Brianna Tam - Bloom.mp3"
+    ]
 }

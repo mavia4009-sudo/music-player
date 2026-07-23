@@ -1,4 +1,8 @@
 {
-    "tittle": "English Songs",
-    "description": "English Songs for you "
+    "title": "English Songs",
+    "description": "English Songs for you ",
+    "songs": [
+        "sigmamusicart-no-copyright-music-537751.mp3",
+        "gvidon-gvidon-medicine-364031.mp3"
+    ]
 }

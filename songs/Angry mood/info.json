@@ -1,4 +1,10 @@
 {
-    "tittle":"Angry Mood",
-    "description":"calm your Angry"
+    "title": "Angry Mood",
+    "description": "calm your Angry",
+    "songs": [
+        "justchilling1991-zagan-320227.mp3",
+        "justchilling1991-moloch-267309.mp3",
+        "brightestavenue-the-beast-in-my-head-155364.mp3",
+        "31736081-incursion-431974.mp3"
+    ]
 }

@@ -1,4 +1,10 @@
 {
-    "tittle": "  copy right songs",
-    "description": "cover songs foryou"
+    "title": "Music Collection",
+    "description": "Afro Pop & Background Music",
+    "songs": [
+        "lightbeatsmusic-joyful-rhythm-walk-funk-513936.mp3",
+        "kontraa-water-afro-pop-music-445661.mp3",
+        "kontraa-water-afro-pop-music-445661 (1).mp3",
+        "ikoliks_aj-background-music-320427.mp3"
+    ]
 }
