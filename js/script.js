@@ -107,7 +107,7 @@ function playMusic(track, pause = false) {
             .then(() => {
                 document.querySelector("#play").src = "pause.svg";
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error("Song play error:", error);
             });
     }
