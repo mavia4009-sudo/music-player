@@ -140,7 +140,7 @@ async function displayalbum() {
     let folders = [
     "ncs",
     "cs",
-    "Karan aujal",
+    "karan aujal",
     "pal pal",
     "talha anjum",
     "English song",
