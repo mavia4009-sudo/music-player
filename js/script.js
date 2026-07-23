@@ -1,7 +1,11 @@
 let currentsong = new Audio();
 let songs = [];
 let currFolder = "";
-let currentSongIndex = 0;
+
+
+// ==============================
+// FORMAT TIME
+// ==============================
 
 function formatTime(seconds) {
 
@@ -12,66 +16,69 @@ function formatTime(seconds) {
     let minutes = Math.floor(seconds / 60);
     let secs = Math.floor(seconds % 60);
 
-    let formattedMinutes = String(minutes).padStart(2, "0");
-    let formattedSeconds = String(secs).padStart(2, "0");
-
-    return `${formattedMinutes}:${formattedSeconds}`;
+    return `${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
 }
 
+
+// ==============================
+// GET SONGS FROM info.json
+// ==============================
 
 async function getsongs(folder) {
 
     currFolder = folder;
 
-    let a = await fetch(`${folder}/info.json`);
-    let response = await a.json();
+    let response = await fetch(`${folder}/info.json`);
+    let data = await response.json();
 
-    songs = response.songs || [];
+    songs = data.songs || [];
 
-    console.log("Folder:", currFolder);
+    console.log("Folder:", folder);
     console.log("Songs:", songs);
 
-    let songUL =
-        document
-            .querySelector(".songlist")
-            .getElementsByTagName("ul")[0];
+
+    let songUL = document
+        .querySelector(".songlist")
+        .getElementsByTagName("ul")[0];
 
     songUL.innerHTML = "";
 
+
+    // SHOW SONGS
+
     for (const song of songs) {
 
-        songUL.innerHTML += `<li>
+        songUL.innerHTML += `
+            <li>
 
-            <img src="music.svg" alt="">
+                <img src="music.svg" alt="">
 
-            <div class="info">
-                <div>${song}</div>
-                <div>Maviya</div>
-            </div>
+                <div class="info">
+                    <div>${song}</div>
+                    <div>Maviya</div>
+                </div>
 
-            <div class="playnow">
-                <span>Play Now</span>
-                <img src="play.svg" alt="">
-            </div>
+                <div class="playnow">
+                    <span>Play Now</span>
+                    <img src="play.svg" alt="">
+                </div>
 
-        </li>`;
-
+            </li>
+        `;
     }
 
+
+    // SONG CLICK
 
     Array.from(
         document
             .querySelector(".songlist")
             .getElementsByTagName("li")
-    ).forEach((e, index) => {
+    ).forEach((element, index) => {
 
-        e.addEventListener("click", () => {
+        element.addEventListener("click", () => {
 
-            currentSongIndex = index;
-
-            playMusic(
-                songs[currentSongIndex]
-            );
+            playMusic(songs[index]);
 
         });
 
@@ -81,21 +88,18 @@ async function getsongs(folder) {
 }
 
 
+// ==============================
+// PLAY MUSIC
+// ==============================
+
 function playMusic(track, pause = false) {
 
     if (!track) {
         return;
     }
 
-   currentsong.src = `${currFolder}/${encodeURIComponent(track)}`;
-
-    document
-        .querySelector(".songinfo")
-        .innerHTML = track;
-
-    document
-        .querySelector(".songtime")
-        .innerHTML = "00:00/00:00";
+    currentsong.src =
+        `${currFolder}/${encodeURIComponent(track)}`;
 
 
     if (!pause) {
@@ -108,27 +112,22 @@ function playMusic(track, pause = false) {
 
     }
 
+
+    document
+        .querySelector(".songinfo")
+        .innerHTML = track;
+
+    document
+        .querySelector(".songtime")
+        .innerHTML = "00:00/00:00";
 }
 
 
-async function displayalbum() {
+// ==============================
+// DISPLAY ALBUMS
+// ==============================
 
-    let folders = [
-        "ncs",
-        "cs",
-        "Karan aujal",
-        "pal pal",
-        "talha anjum",
-        "English song",
-        "majboor",
-        "Love song",
-        "fifa",
-        "chill",
-        "Afsos",
-        "Angry mood",
-       
-        
-    ];
+async function displayalbum() {
 
     let cardcontainer =
         document.querySelector(".cardcontainer");
@@ -136,72 +135,132 @@ async function displayalbum() {
     cardcontainer.innerHTML = "";
 
 
+    // EXACT FOLDER NAMES
+
+    let folders = [
+    "ncs",
+    "cs",
+    "Karan aujal",
+    "pal pal",
+    "talha anjum",
+    "English song",
+    "majboor",
+    "Love song",
+    "fifa",
+    "chill",
+    "Afsos",
+    "Angry mood"
+];
+
+
+    // LOAD CARDS
+
     for (const folder of folders) {
 
-        let a =
-            await fetch(
-                `songs/${folder}/info.json`
-            );
+        try {
 
-        let response =
-            await a.json();
+            let response =
+                await fetch(
+                    `songs/${folder}/info.json`
+                );
 
 
-        cardcontainer.innerHTML += `<div
-            data-folder="${folder}"
-            class="card"
-        >
+            if (!response.ok) {
 
-            <div class="imgbox">
+                console.error(
+                    "info.json not found:",
+                    folder
+                );
 
-                <img
-                    src="songs/${folder}/cover.jpg"
-                    alt=""
+                continue;
+
+            }
+
+
+            let info =
+                await response.json();
+
+
+            cardcontainer.innerHTML += `
+
+                <div
+                    data-folder="${folder}"
+                    class="card"
                 >
 
-                <div class="cardplay">
+                    <div class="imgbox">
 
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="black"
-                    >
+                        <img
+                            src="songs/${folder}/cover.jpg"
+                            alt=""
+                        >
 
-                        <path
-                            d="M8 5v14l11-7z"
-                        />
+                        <div class="cardplay">
 
-                    </svg>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="black"
+                            >
+
+                                <path
+                                    d="M8 5v14l11-7z"
+                                />
+
+                            </svg>
+
+                        </div>
+
+                        <h2>
+                            ${info.title}
+                        </h2>
+
+                        <p>
+                            ${info.description}
+                        </p>
+
+                    </div>
 
                 </div>
 
-                <h2>${response.title}</h2>
+            `;
 
-                <p>${response.description}</p>
+        } catch (error) {
 
-            </div>
+            console.error(
+                "Error loading:",
+                folder,
+                error
+            );
 
-        </div>`;
+        }
 
     }
 
 
+    // ==============================
+    // CARD CLICK
+    // ==============================
+
     Array.from(
         document.getElementsByClassName("card")
-    ).forEach(e => {
+    ).forEach(card => {
 
-        e.addEventListener(
+        card.addEventListener(
             "click",
-            async item => {
+            async () => {
+
+                let folder =
+                    card.dataset.folder;
+
 
                 songs =
                     await getsongs(
-                        `songs/${item.currentTarget.dataset.folder}`
+                        `songs/${folder}`
                     );
 
-                currentSongIndex = 0;
 
                 if (songs.length > 0) {
 
@@ -219,10 +278,19 @@ async function displayalbum() {
 }
 
 
+// ==============================
+// MAIN
+// ==============================
+
 async function main() {
+
+
+    // DISPLAY CARDS
 
     await displayalbum();
 
+
+    // DEFAULT SONGS
 
     songs =
         await getsongs(
@@ -232,8 +300,6 @@ async function main() {
 
     if (songs.length > 0) {
 
-        currentSongIndex = 0;
-
         playMusic(
             songs[0],
             true
@@ -241,6 +307,10 @@ async function main() {
 
     }
 
+
+    // ==============================
+    // PLAY / PAUSE
+    // ==============================
 
     document
         .querySelector("#play")
@@ -256,9 +326,7 @@ async function main() {
                         .querySelector("#play")
                         .src = "pause.svg";
 
-                }
-
-                else {
+                } else {
 
                     currentsong.pause();
 
@@ -271,6 +339,10 @@ async function main() {
             }
         );
 
+
+    // ==============================
+    // TIME UPDATE
+    // ==============================
 
     currentsong.addEventListener(
         "timeupdate",
@@ -288,7 +360,7 @@ async function main() {
                     .querySelector(".circle")
                     .style.left =
                     (currentsong.currentTime /
-                    currentsong.duration) *
+                        currentsong.duration) *
                     100 + "%";
 
             }
@@ -296,6 +368,10 @@ async function main() {
         }
     );
 
+
+    // ==============================
+    // SEEK BAR
+    // ==============================
 
     document
         .querySelector(".seekbar")
@@ -305,7 +381,8 @@ async function main() {
 
                 let percent =
                     (e.offsetX /
-                    e.target.getBoundingClientRect().width) *
+                        e.target.getBoundingClientRect()
+                            .width) *
                     100;
 
 
@@ -328,6 +405,10 @@ async function main() {
         );
 
 
+    // ==============================
+    // HAMBURGER
+    // ==============================
+
     document
         .querySelector(".hamburger")
         .addEventListener(
@@ -341,6 +422,10 @@ async function main() {
             }
         );
 
+
+    // ==============================
+    // CLOSE
+    // ==============================
 
     document
         .querySelector(".close")
@@ -356,18 +441,34 @@ async function main() {
         );
 
 
+    // ==============================
+    // PREVIOUS
+    // ==============================
+
     document
         .querySelector("#prevwies")
         .addEventListener(
             "click",
             () => {
 
-                if (currentSongIndex > 0) {
+                let currentSong =
+                    decodeURIComponent(
+                        currentsong.src
+                            .split("/")
+                            .pop()
+                    );
 
-                    currentSongIndex--;
+
+                let index =
+                    songs.indexOf(
+                        currentSong
+                    );
+
+
+                if (index > 0) {
 
                     playMusic(
-                        songs[currentSongIndex]
+                        songs[index - 1]
                     );
 
                 }
@@ -375,6 +476,10 @@ async function main() {
             }
         );
 
+
+    // ==============================
+    // NEXT
+    // ==============================
 
     document
         .querySelector("#next")
@@ -382,15 +487,27 @@ async function main() {
             "click",
             () => {
 
+                let currentSong =
+                    decodeURIComponent(
+                        currentsong.src
+                            .split("/")
+                            .pop()
+                    );
+
+
+                let index =
+                    songs.indexOf(
+                        currentSong
+                    );
+
+
                 if (
-                    currentSongIndex + 1 <
+                    index + 1 <
                     songs.length
                 ) {
 
-                    currentSongIndex++;
-
                     playMusic(
-                        songs[currentSongIndex]
+                        songs[index + 1]
                     );
 
                 }
@@ -399,17 +516,24 @@ async function main() {
         );
 
 
+    // ==============================
+    // VOLUME
+    // ==============================
+
     document
-        .querySelector(".range")
-        .getElementsByTagName("input")[0]
+        .querySelector(".range input")
         .addEventListener(
             "input",
             e => {
 
                 let vol =
-                    parseInt(e.target.value) / 100;
+                    Number(e.target.value) /
+                    100;
 
-                currentsong.volume = vol;
+
+                currentsong.volume =
+                    vol;
+
 
                 if (vol <= 0.1) {
 
@@ -419,9 +543,7 @@ async function main() {
                         .querySelector(".volume img")
                         .src = "mute.svg";
 
-                }
-
-                else {
+                } else {
 
                     currentsong.muted = false;
 
@@ -435,27 +557,31 @@ async function main() {
         );
 
 
+    // ==============================
+    // MUTE
+    // ==============================
+
     document
         .querySelector(".volume > img")
         .addEventListener(
             "click",
             e => {
 
-                currentsong.muted =
-                    !currentsong.muted;
-
-
                 if (currentsong.muted) {
 
-                    e.target.src =
-                        "mute.svg";
-
-                }
-
-                else {
+                    currentsong.muted =
+                        false;
 
                     e.target.src =
                         "vloume.svg";
+
+                } else {
+
+                    currentsong.muted =
+                        true;
+
+                    e.target.src =
+                        "mute.svg";
 
                 }
 
@@ -464,5 +590,9 @@ async function main() {
 
 }
 
+
+// ==============================
+// START
+// ==============================
 
 main();
